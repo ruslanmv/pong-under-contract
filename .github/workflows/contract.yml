@@ -1,0 +1,55 @@
+# Gate every change on the Matrix contract, then publish the game to Pages.
+# This is the same `mb check` from the local loop — run in CI so a rogue AI
+# edit (touching anything outside the allow-list) fails the build, fail-closed.
+name: contract + deploy
+
+on:
+  push:
+    branches: ["main", "master"]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  contract-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Matrix Builder (mb)
+        run: pip install agent-generator
+      - name: Validate the change set against the contract
+        run: |
+          set -e
+          echo "Running mb check against the Matrix Bundle…"
+          mb check frontend/index.html | tee /tmp/verdict.txt
+          if ! grep -q "MATRIX_STATUS: approved" /tmp/verdict.txt; then
+            echo "::error::Contract not satisfied — change blocked (fail-closed)."
+            exit 1
+          fi
+          echo "✅ Contract satisfied — MATRIX_STATUS: approved."
+
+  deploy:
+    needs: contract-gate
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - name: Upload the game (frontend/) as the Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./frontend
+      - id: deployment
+        uses: actions/deploy-pages@v4

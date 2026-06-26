@@ -1,0 +1,13 @@
+{
+  "blueprint_id": "bp-76e47f429754",
+  "current_commit_ref": "mc-caf49981d56a",
+  "idea": "A visually striking NEON retro Pong game, single self-contained HTML file, runs on GitHub Pages",
+  "last_failing_batch": null,
+  "next_batch_ordinal": 2,
+  "next_commit_no": 2,
+  "project_id": "bp-76e47f429754",
+  "quality": "standard",
+  "slug": "a-visually-striking-neon-retro-pong-game-single-self-contained-html-file",
+  "title": "Pong Under Contract v3",
+  "version_label": "v1.0.0"
+}

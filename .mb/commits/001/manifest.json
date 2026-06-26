@@ -1,0 +1,12 @@
+{
+  "batch_ref": "bat-834828045ec6",
+  "changed": [
+    "frontend/index.html"
+  ],
+  "commit_no": 1,
+  "commit_ref": "mc-caf49981d56a",
+  "parent_commit_ref": null,
+  "summary": "Build the complete neon Pong (gameplay + neon CRT visuals)",
+  "tree_hash": "sha256:959f9cada636604db33bc1ba82fed347457dcb032c37ac195b4343c5f0ea6e72",
+  "validation_status": "approved"
+}
